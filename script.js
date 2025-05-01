@@ -28,7 +28,7 @@ const createScene = async () => {
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
   const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 50, height: 10}, scene);
 
-  const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/", "Jacaré_0501134656_texture.fbx", scene);
+  const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/", "Jacare.fbx", scene);
   const jacare = result.meshes[0];
   const skeleton = result.skeletons[0];
   jacare.scaling = new BABYLON.Vector3(1.5, 1.5, 1.5);
