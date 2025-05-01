@@ -1,4 +1,3 @@
-
 const canvas = document.getElementById("renderCanvas");
 const engine = new BABYLON.Engine(canvas, true);
 
@@ -26,15 +25,17 @@ const createScene = async () => {
   camera.attachControl(canvas, true);
 
   const light = new BABYLON.HemisphericLight("light", new BABYLON.Vector3(0, 1, 0), scene);
-  const ground = BABYLON.MeshBuilder.CreateGround("ground", {width: 50, height: 10}, scene);
+  const ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 50, height: 10 }, scene);
 
-  const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/", "Jacare.fbx", scene);
+  // Carrega o personagem principal (jacaré)
+  const result = await BABYLON.SceneLoader.ImportMeshAsync("", "assets/", "Jacare.glb", scene);
   const jacare = result.meshes[0];
   const skeleton = result.skeletons[0];
   jacare.scaling = new BABYLON.Vector3(1.5, 1.5, 1.5);
   jacare.position = new BABYLON.Vector3(0, 0, 0);
   camera.lockedTarget = jacare;
 
+  // Gerenciador de animações
   let currentAnim = null;
   const animations = {};
 
@@ -45,10 +46,11 @@ const createScene = async () => {
     animGroup.stop();
   };
 
-  await loadAnim("idle", "Idle.fbx");
-  await loadAnim("walk", "Walking.fbx");
-  await loadAnim("run", "Running.fbx");
-  await loadAnim("jump", "Jumping.fbx");
+  // Carrega animações .glb
+  await loadAnim("idle", "Idle.glb");
+  await loadAnim("walk", "Walking.glb");
+  await loadAnim("run", "Running.glb");
+  await loadAnim("jump", "Jumping.glb");
 
   const playAnim = (name) => {
     if (currentAnim === name) return;
@@ -59,6 +61,7 @@ const createScene = async () => {
 
   playAnim("idle");
 
+  // Lógica de movimentação lateral e animação
   scene.onBeforeRenderObservable.add(() => {
     const delta = engine.getDeltaTime() / 1000;
     let moved = false;
@@ -90,4 +93,5 @@ const createScene = async () => {
 createScene().then((scene) => {
   engine.runRenderLoop(() => scene.render());
 });
+
 window.addEventListener("resize", () => engine.resize());
